@@ -1,0 +1,9 @@
+{
+    "id": "AVBalatroMod",
+    "name": "Astal Volumes Balatro Mod",
+    "author": ["JohnLukeKnapp-dot"],
+    "description": "A balatro mod based on the world of Astral Volumes",
+    "prefix": "astravol",
+    "main_file": "main.lua",
+    "version": "0.0.1"
+}
