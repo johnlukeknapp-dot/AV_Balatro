@@ -15,6 +15,15 @@ return{
                     "{C:attention}5{}'s give {C:mult}+#3#{} mult, and {C:attention}2{}'s give {C:chips}+#4#{} chips",
                     
                 }
+            },
+            j_astravol_Princess_of_the_Stars = {
+                name = 'Princess of the Stars',
+                text = {
+                    "Played cards with {C:diamonds}#4#{} suit",
+                    "Give {C:mult}+#3#{} Mult and have a",
+                    "{C:green}#1# in #2#{} chance to retrigger",
+                    "Debuffs Queens"
+                }
             }
         }
     }
