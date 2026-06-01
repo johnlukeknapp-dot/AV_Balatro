@@ -1,10 +1,7 @@
 SMODS.Joker{
     key = 'joker1',
     atlas = 'placeholders',
-    pos = {
-        x=0,
-        y=0
-    },
+    pos = {x=0, y=0},
     config = {
         extra = {
             chips = 100
@@ -33,19 +30,31 @@ SMODS.Joker{
     key = 'Propagule',
     atlas = 'placeholders',
     pos = { x = 1, y = 0 },
-    rarity = 1,
+    rarity = 2,
     cost = 4,
-    config = {extra = { repetitions = 1, odds = 2} },
+    config = {extra = { repetitions = 1, odds = 2, mult = 5, chips = 22} },
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'astravol_Propagule')
-        return { vars = { numerator, denominator } }
+        return { vars = { numerator, denominator, card.ability.extra.mult, card.ability.extra.chips} }
      end,
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Propagule', 1, card.ability.extra.odds) then
             local id = context.other_card:get_id()
             if id == 2 or id == 5 then
                 return {
-                    repetitions = card.ability.extra.repetitions
+                    repetitions = card.ability.extra.repetitions,
+                }
+            end
+        end
+        if context.individual and context.cardarea == G.play then
+            local id = context.other_card:get_id()
+            if id == 2 then
+                return{
+                    chips = card.ability.extra.chips
+                }
+            elseif id == 5 then
+                return{
+                    mult = card.ability.extra.mult
                 }
             end
         end

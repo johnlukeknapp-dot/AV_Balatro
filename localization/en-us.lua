@@ -12,6 +12,8 @@ return{
                 text = {
                     "{C:green}#1# in #2#{} chance to",
                     "Retrigger each played {C:attention}5{}, or {C:attention}2{}",
+                    "{C:attention}5{}'s give {C:mult}+#3#{} mult, and {C:attention}2{}'s give {C:chips}+#4#{} chips",
+                    
                 }
             }
         }

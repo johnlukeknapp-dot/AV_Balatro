@@ -1,7 +1,7 @@
 {
     "id": "AVBalatroMod",
-    "name": "Astal Volumes Balatro Mod",
-    "author": ["Luke99m"],
+    "name": "Astal Volumes Mod",
+    "author": ["Luke99m, Baconated_Coke"],
     "description": "A balatro mod based on the world of Astral Volumes",
     "prefix": "astravol",
     "main_file": "main.lua",
