@@ -66,7 +66,7 @@ SMODS.Joker{
 SMODS.Joker{
     key = 'Princess_of_the_Stars',
     atlas = 'placeholders',
-    pos = { x = 0, y = 0 },
+    pos = { x = 3, y = 0 },
     rarity = 1,
     cost = 5,
     config = {extra = {repetitions = 1, odds = 2, mult = 2, suit = 'Diamonds'}},
@@ -84,6 +84,24 @@ SMODS.Joker{
             return{
                 mult = card.ability.extra.mult
             }
+        end
+    end,
+    update = function(self, card, dt)
+        if G.deck and card.added_to_deck then
+			for i, v in pairs(G.deck.cards) do
+                --local id = context.other_card:get_id()
+				if v:get_id() == 12 then
+                    v:set_debuff(true)
+                end
+            end
+        end
+        if G.hand and card.added_to_deck then
+			for i, v in pairs(G.hand.cards) do
+                --local id = context.other_card:get_id()
+				if v:get_id() == 12 then
+                    v:set_debuff(true)
+                end
+            end
         end
     end
 }
