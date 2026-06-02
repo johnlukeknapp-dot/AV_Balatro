@@ -32,20 +32,33 @@ SMODS.Joker{
     pos = { x = 1, y = 0 },
     rarity = 2,
     cost = 7,
-    config = {extra = { repetitions = 1, odds = 2, mult = 5, chips = 22} },
+    config = {extra = { copy = 1, odds = 8, mult = 5, chips = 22} },
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'astravol_Propagule')
-        return { vars = { numerator, denominator, card.ability.extra.mult, card.ability.extra.chips} }
+        return { vars = { numerator, denominator, card.ability.extra.mult, card.ability.extra.chips, card.ability.extra.copy} }
      end,
     calculate = function(self, card, context)
-        if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Propagule', 1, card.ability.extra.odds) then
-            local id = context.other_card:get_id()
-            if id == 2 or id == 5 then
-                return {
-                    repetitions = card.ability.extra.repetitions,
-                }
-            end
+        if context.individual and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Propagule', 1, card.ability.extra.odds) then
+                local id = context.other_card:get_id()
+                if id == 2 or id == 5 then
+                    G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                    local card_copied = copy_card(context.full_hand[1], nil, nil, G.playing_card)
+                    card_copied:add_to_deck()
+                    G.deck.config.card_limit = G.deck.config.card_limit + 1
+                    table.insert(G.playing_cards, card_copied)
+                    G.hand:emplace(card_copied)
+                    card_copied.states.visible = nil
+
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            card_copied:start_materialize()
+                            return true
+                        end
+                    }))
+                end
+            
         end
+
         if context.individual and context.cardarea == G.play then
             local id = context.other_card:get_id()
             if id == 2 then
@@ -60,6 +73,7 @@ SMODS.Joker{
         end
     end
 }
+
 
 
 --Tac
@@ -89,7 +103,6 @@ SMODS.Joker{
     update = function(self, card, dt)
         if G.deck and card.added_to_deck then
 			for i, v in pairs(G.deck.cards) do
-                --local id = context.other_card:get_id()
 				if v:get_id() == 12 then
                     v:set_debuff(true)
                 end
@@ -97,7 +110,6 @@ SMODS.Joker{
         end
         if G.hand and card.added_to_deck then
 			for i, v in pairs(G.hand.cards) do
-                --local id = context.other_card:get_id()
 				if v:get_id() == 12 then
                     v:set_debuff(true)
                 end
