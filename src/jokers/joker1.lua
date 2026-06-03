@@ -1,33 +1,34 @@
-SMODS.Joker{
-    key = 'joker1',
-    atlas = 'placeholders',
-    pos = {x=0, y=0},
-    config = {
-        extra = {
-            chips = 100
-        }
-    },
-    rarity = 1,
-    cost = 5,
-    loc_vars = function(self, info_queue, card)
-            return {
-                vars = {
-                card.ability.extra.chips
-            }
-        }
-    end,
-    calculate = function(self, card, context)
-            if context.joker_main then
-                return {
-                    chips = card.ability.extra.chips
-                }
-            end
-    end
-}
+--SMODS.Joker{
+    --key = 'joker1',
+    --atlas = 'placeholders',
+    --pos = {x=0, y=0},
+    --config = {
+       --extra = {
+            --chips = 100
+        --}
+    --},
+    --rarity = 1,
+    --cost = 5,
+    --loc_vars = function(self, info_queue, card)
+            --return {
+                --vars = {
+                --card.ability.extra.chips
+            --}
+        --}
+    --end,
+    --calculate = function(self, card, context)
+            --if context.joker_main then
+                --return {
+                    --chips = card.ability.extra.chips
+                --}
+            --end
+    --end
+--}
 
 --JMC
 SMODS.Joker{
     key = 'Propagule',
+    unlocked = true,
     atlas = 'placeholders',
     pos = { x = 1, y = 0 },
     rarity = 2,
@@ -79,11 +80,12 @@ SMODS.Joker{
 --Tac
 SMODS.Joker{
     key = 'Princess_of_the_Stars',
+    unlocked = true,
     atlas = 'placeholders',
     pos = { x = 3, y = 0 },
     rarity = 1,
     cost = 5,
-    config = {extra = {repetitions = 1, odds = 2, mult = 2, suit = 'Diamonds'}},
+    config = {extra = {repetitions = 1, odds = 2, mult = 1, suit = 'Diamonds'}},
     loc_vars = function(self, info_queue, card)
         local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'astravol_Princess_of_the_Stars')
         return { vars = { numerator, denominator, card.ability.extra.mult , localize(card.ability.extra.suit, 'suits_singular') } }
@@ -116,4 +118,51 @@ SMODS.Joker{
             end
         end
     end
+}
+--Orange
+SMODS.Joker {
+    key = 'Orange',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = { x = 2, y = 0},
+    rarity = 2,
+    cost = 6,
+    calculate = function (self, card, context)
+        if context.skip_blind then
+            SMODS.add_card {
+                set = 'Chariot', key = 'c_chariot', edition = 'e_negative',
+            }
+            SMODS.add_card {
+                set = 'Chariot', key = 'c_chariot', edition = 'e_negative',
+            }
+        end
+    end
+}
+
+
+--Zecah
+SMODS.Joker {
+    key = 'King_of_the_Stars',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = {x = 0, y = 0},
+    rarity = 1,
+    cost = 5,
+    config = {extra = {repetitions = 1, odds = 2, chips = 10, suit = 'Diamonds'}},
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'astravol_King_of_the_Stars')
+        return { vars = { numerator, denominator, card.ability.extra.chips , localize(card.ability.extra.suit, 'suits_singular') } }
+    end,
+    calculate = function(self, card, context)
+        if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_King_of_the_Stars', 1, card.ability.extra.odds) and context.other_card:is_suit(card.ability.extra.suit) then    
+           return {
+                    repetitions = card.ability.extra.repetitions,
+                } 
+    end
+        if context.individual and context.cardarea == G.play and context.other_card:is_suit(card.ability.extra.suit) then
+            return{
+                chips = card.ability.extra.chips
+            }
+        end
+    end,
 }

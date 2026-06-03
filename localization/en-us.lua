@@ -1,12 +1,12 @@
 return{
     descriptions = {
         Joker = {
-            j_astravol_joker1 = {
-                name = 'Joker1',
-                text = {
-                    '{C:chips}+#1#{} chips'
-                }
-            },
+            --j_astravol_joker1 = {
+                --name = 'Joker1',
+                --text = {
+                    --'{C:chips}+#1#{} chips'
+                --}
+            --},
             j_astravol_Propagule = {
                 name = 'Propagule',
                 text = {
@@ -23,6 +23,21 @@ return{
                     "Give {C:mult}+#3#{} Mult and have a",
                     "{C:green}#1# in #2#{} chance to retrigger",
                     "Debuffs Queens"
+                }
+            },
+            j_astravol_Orange = {
+                name = 'Orange',
+                text = {
+                    "Upon {C:attention}skipping{} a blind",
+                    "Creates 2 {C:dark_edition}negative{} {C:tarot}Chariots{}"
+                }
+            },
+            j_astravol_King_of_the_Stars = {
+                name = 'King of the Stars',
+                text = {
+                    "Played cards with {C:diamonds}#4#{} suit",
+                    "Give {C:chips}+#3#{} Chips and have a",
+                    "{C:green}#1# in #2#{} chance to retrigger",
                 }
             }
         }
