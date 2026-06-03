@@ -25,7 +25,7 @@
     --end
 --}
 
---JMC
+--JMC (art by Baconated_Coke)
 SMODS.Joker{
     key = 'Propagule',
     unlocked = true,
@@ -77,7 +77,7 @@ SMODS.Joker{
 
 
 
---Tac
+--Tac (art by Tac)
 SMODS.Joker{
     key = 'Princess_of_the_Stars',
     unlocked = true,
@@ -119,7 +119,7 @@ SMODS.Joker{
         end
     end
 }
---Orange
+--Orange (art by Tac)
 SMODS.Joker {
     key = 'Orange',
     unlocked = true,
@@ -165,4 +165,33 @@ SMODS.Joker {
             }
         end
     end,
+}
+
+--Xenas
+SMODS.Joker {
+    key = 'Queen_of_the_Stars',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = {x = 4, y = 0},
+    rarity = 2,
+    cost = 7,
+    config = { extra =  {repetitions = 1, replay_odds = 2, tarot_odds = 10, suit = 'Diamonds'} },
+    loc_vars = function(self, info_queue, card)
+        local replay_numerator, replay_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.replay_odds, 'astravol_Queen_of_the_Stars')
+        local tarot_numerator, tarot_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.tarot_odds, 'astravol_Queen_of_the_Stars')
+        return { vars = { replay_numerator, replay_denominator, tarot_numerator, tarot_denominator, localize(card.ability.extra.suit, 'suits_singular') } }
+    end,
+    calculate = function(self, card, context)
+        if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Queen_of_the_Stars', 1, card.ability.extra.replay_odds) and context.other_card:is_suit(card.ability.extra.suit) then    
+           return {
+                    repetitions = card.ability.extra.repetitions,
+            } 
+        end
+        if context.individual and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Queen_of_the_Stars', 1, card.ability.extra.tarot_odds) and context.other_card:is_suit(card.ability.extra.suit) and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then    
+            SMODS.add_card {
+                set = 'Tarot'
+            }
+        end
+    end
+
 }

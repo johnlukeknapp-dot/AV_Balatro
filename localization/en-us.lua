@@ -39,6 +39,14 @@ return{
                     "Give {C:chips}+#3#{} Chips and have a",
                     "{C:green}#1# in #2#{} chance to retrigger",
                 }
+            },
+            j_astravol_Queen_of_the_Stars = {
+                name = 'Queen of the Stars',
+                text = {
+                    "Played cards with {C:diamonds}#5#{} suit",
+                    "Have a {C:green}#1# in #2#{} chance to retrigger",
+                    "And a {C:green}#3# in #4#{} chance to make a tarot card"
+                }
             }
         }
     }
