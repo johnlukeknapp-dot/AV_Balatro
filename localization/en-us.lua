@@ -47,6 +47,15 @@ return{
                     "Have a {C:green}#1# in #2#{} chance to retrigger",
                     "And a {C:green}#3# in #4#{} chance to make a tarot card"
                 }
+            },
+            j_astravol_King_of_Nothing = {
+                name = "King of Nothing",
+                text = {
+                    "Scored {C:attention}#1#{} upgrades",
+                    "the level of {C:attention}#1#{}",
+                    "Scored cards in {C:attention}#1#{} are destroyed",
+                    "Poker hand changes at end of round"
+                }
             }
         }
     }

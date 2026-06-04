@@ -145,7 +145,7 @@ SMODS.Joker {
     key = 'King_of_the_Stars',
     unlocked = true,
     atlas = 'placeholders',
-    pos = {x = 0, y = 0},
+    pos = {x = 0, y = 1},
     rarity = 1,
     cost = 5,
     config = {extra = {repetitions = 1, odds = 2, chips = 10, suit = 'Diamonds'}},
@@ -194,4 +194,46 @@ SMODS.Joker {
         end
     end
 
+}
+
+--Oldrummer
+SMODS.Joker {
+    key = 'King_of_Nothing',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = {x = 0, y = 0},
+    rarity = 3,
+    cost = 9,
+    config = { extra = { poker_hand = 'High Card' }},
+    loc_vars = function (self, info_queue, card)
+        return { vars = {localize(card.ability.extra.poker_hand, 'poker_hands')}}
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.scoring_name == card.ability.extra.poker_hand then
+            return {
+                level_up = true,
+                message = localize('k_level_up_ex'),
+            }
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            local _poker_hands = {}
+            for handname, _ in pairs(G.GAME.hands) do
+                if SMODS.is_poker_hand_visible(handname) and handname ~= card.ability.extra.poker_hand then
+                    _poker_hands[#_poker_hands + 1] = handname
+                end
+            end
+            card.ability.extra.poker_hand = pseudorandom_element(_poker_hands, 'astravol_King_of_Nothing')
+            return {
+                message = localize('k_reset')
+            }
+        end
+    end,
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and not context.blueprint and context.scoring_name == card.ability.extra.poker_hand then
+            return {
+                remove = true,
+                delay = 0.45
+            }
+        end
+    end
 }
