@@ -237,3 +237,57 @@ SMODS.Joker {
         end
     end
 }
+
+--Doorman from slay the lock
+SMODS.Joker{
+    key = 'Doorman',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = {x = 4, y = 0},
+    rarity = 3,
+    cost = 8,
+    blueprint_compat = false,
+    config = { extra = { xmult = 1.5,poker_hand = 'Pair'}},
+    loc_vars = function (self, info_queue, card)
+            return { vars = {card.ability.extra.xmult, localize(card.ability.extra.poker_hand, 'poker_hands')}}
+        end,
+    calculate = function(self, card, context)
+        if context.cardarea == G.play and context.individual and context.scoring_name == card.ability.extra.poker_hand and SMODS.has_enhancement(context.other_card, 'm_steel') then
+            return{
+                xmult = card.ability.extra.xmult
+            }
+        end 
+    end
+}
+
+--Kiryu (kirby)
+SMODS.Joker {
+    key = 'Kiryu',
+    unlocked = true,
+    atlas = 'placeholders',
+    pos = {x = 0, y = 0},
+    rarity = 1,
+    cost = 5,
+    config = { extra =  {repetitions = 1, replay_odds = 2, suit = 'Diamonds', poker_hand = 'Flush'} },
+    loc_vars = function(self, info_queue, card)
+        local replay_numerator, replay_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.replay_odds, 'astravol_Kiryu')
+        --local change_numerator, change_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.change_odds, 'astravol_Kiryu')
+        return { vars = { replay_numerator, replay_denominator, localize(card.ability.extra.suit, 'suits_singular'),  localize(card.ability.extra.poker_hand, 'poker_hands') } }
+    end,
+    calculate = function(self, card, context)
+        if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Kiryu', 1, card.ability.extra.replay_odds) and context.other_card:is_suit(card.ability.extra.suit) then    
+           return {
+                    repetitions = card.ability.extra.repetitions,
+            } 
+        end
+        
+        if context.scoring_name == card.ability.extra.poker_hand and context.cardarea == G.hand and G.hand.cards and #G.hand.cards > 0 then
+            for i = 1, #G.hand.cards do
+                SMODS.change_base(G.hand.cards[i], card.ability.extra.suit)
+            end
+        end
+    end
+}
+--, suit_conv = 'Diamonds'
+ --localize(card.ability.suit_conv, 'suits_plural')
+ 
