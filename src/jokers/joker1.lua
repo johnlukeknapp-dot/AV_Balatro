@@ -227,15 +227,21 @@ SMODS.Joker {
                 message = localize('k_reset')
             }
         end
-    end,
-    calculate = function(self, card, context)
         if context.cardarea == G.play and not context.blueprint and context.scoring_name == card.ability.extra.poker_hand then
             return {
                 remove = true,
                 delay = 0.45
             }
         end
-    end
+    end,
+    --calculate = function(self, card, context)
+        --if context.cardarea == G.play and not context.blueprint and context.scoring_name == card.ability.extra.poker_hand then
+            --return {
+                --remove = true,
+                --delay = 0.45
+            --}
+        --end
+    --end
 }
 
 --Doorman from slay the lock
