@@ -69,9 +69,9 @@ return{
                 name = "Brother of the Stars",
                 text = {
                     "Played cards with {C:diamonds}#3#{} suit",
-                    "have a {C:green}#1# in #2#{} chance to retrigger",
-                    --"When playing a {C:attention}#6#{}, {C:green}#3# in #4#{} to convert",
-                    --"each card held in hand to {C:diamonds}#7#{}"
+                    "have a {C:green}#1# in #2#{} chance to retrigger.",
+                    "When playing a {C:attention}#4#{}, {C:green}#5# in #6#{} to convert",
+                    "all cards held in hand to {C:diamonds}#3#{}"
                 }
             }
         }

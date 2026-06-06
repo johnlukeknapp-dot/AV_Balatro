@@ -268,11 +268,11 @@ SMODS.Joker {
     pos = {x = 0, y = 0},
     rarity = 1,
     cost = 5,
-    config = { extra =  {repetitions = 1, replay_odds = 2, suit = 'Diamonds', poker_hand = 'Flush'} },
+    config = { extra =  {repetitions = 1, replay_odds = 2, change_odds = 3, suit = 'Diamonds', poker_hand = 'Flush'} },
     loc_vars = function(self, info_queue, card)
         local replay_numerator, replay_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.replay_odds, 'astravol_Kiryu')
-        --local change_numerator, change_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.change_odds, 'astravol_Kiryu')
-        return { vars = { replay_numerator, replay_denominator, localize(card.ability.extra.suit, 'suits_singular'),  localize(card.ability.extra.poker_hand, 'poker_hands') } }
+        local change_numerator, change_denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.change_odds, 'astravol_Kiryu')
+        return { vars = { replay_numerator, replay_denominator, localize(card.ability.extra.suit, 'suits_singular'),  localize(card.ability.extra.poker_hand, 'poker_hands'), change_numerator, change_denominator} }
     end,
     calculate = function(self, card, context)
         if context.repetition and context.cardarea == G.play and SMODS.pseudorandom_probability(card, 'astravol_Kiryu', 1, card.ability.extra.replay_odds) and context.other_card:is_suit(card.ability.extra.suit) then    
@@ -281,13 +281,42 @@ SMODS.Joker {
             } 
         end
         
-        if context.scoring_name == card.ability.extra.poker_hand and context.cardarea == G.hand and G.hand.cards and #G.hand.cards > 0 then
+        if context.scoring_name == card.ability.extra.poker_hand and context.joker_main and #G.hand.cards > 0 and SMODS.pseudorandom_probability(card, 'astravol_Kiryu', 1, card.ability.extra.change_odds) then
             for i = 1, #G.hand.cards do
-                SMODS.change_base(G.hand.cards[i], card.ability.extra.suit)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        G.hand.cards[i]:flip()
+                        play_sound('card1', percent)
+                        G.hand.cards[i]:juice_up(0.3, 0.3)
+                        return true
+                    end
+                    }))
+            end
+            for i = 1, #G.hand.cards do
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        SMODS.change_base(G.hand.cards[i], card.ability.extra.suit)
+                        return true
+                    end
+                    }))
+            end
+            for i = 1, #G.hand.cards do
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.15,
+                    func = function()
+                        G.hand.cards[i]:flip()
+                        play_sound('tarot2', percent, 0.6)
+                        G.hand.cards[i]:juice_up(0.3, 0.3)
+                        return true
+                    end
+                    }))
             end
         end
     end
 }
---, suit_conv = 'Diamonds'
- --localize(card.ability.suit_conv, 'suits_plural')
  
