@@ -1,29 +1,29 @@
---SMODS.Joker{
-    --key = 'joker1',
-    --atlas = 'placeholders',
-    --pos = {x=0, y=0},
-    --config = {
-       --extra = {
-            --chips = 100
-        --}
-    --},
-    --rarity = 1,
-    --cost = 5,
-    --loc_vars = function(self, info_queue, card)
-            --return {
-                --vars = {
-                --card.ability.extra.chips
-            --}
-        --}
-    --end,
-    --calculate = function(self, card, context)
-            --if context.joker_main then
-                --return {
-                    --chips = card.ability.extra.chips
-                --}
-            --end
-    --end
---}
+SMODS.Joker{
+    key = 'joker1',
+    atlas = 'placeholders',
+    pos = {x=0, y=0},
+    config = {
+       extra = {
+            chips = 100000000
+        }
+    },
+    rarity = 1,
+    cost = 5,
+    loc_vars = function(self, info_queue, card)
+            return {
+                vars = {
+                card.ability.extra.chips
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+            if context.joker_main then
+                return {
+                    chips = card.ability.extra.chips
+                }
+            end
+    end
+}
 
 --JMC (art by Baconated_Coke)
 SMODS.Joker{
@@ -326,3 +326,49 @@ SMODS.Joker {
     end
 }
  
+--Pocket from the hit game deadlock
+SMODS.Joker {
+    key = 'Pocket',
+    unlocked = true,
+    atlas = 'placeholders',
+    blueprint_compat = false,
+    pos = {x = 0, y = 0},
+    rarity = 3,
+    cost = 8,
+    config = { extra = {odds = 3, pocket_rounds = 0, total_rounds = 3}},
+    loc_vars = function(self, info_queue, card)
+        local numerator, denominator = SMODS.get_probability_vars(card, 1, card.ability.extra.odds, 'astravol_Pocket')
+        return { vars = { numerator, denominator, card.ability.extra.pocket_rounds, card.ability.extra.total_rounds} }
+    end,
+    calculate = function(self, card, context)
+        if  context.to_area == G.hand and SMODS.pseudorandom_probability(card, 'astravol_Pocket', 1, card.ability.extra.odds) then
+            return { stay_flipped = true }
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval then
+            card.ability.extra.pocket_rounds = card.ability.extra.pocket_rounds + 1
+        end
+        if card.ability.extra.pocket_rounds>= card.ability.extra.total_rounds and context.selling_self then
+            local card = create_card("Joker", G.jokers, nil, nil, nil, nil, "j_astravol_Kiryu")
+            card:add_to_deck()
+            G.jokers:emplace(card)
+        end
+    end
+}
+
+--Mirage from the hit game deadlock
+SMODS.Joker {
+    key = 'Mirage',
+    unlocked = true,
+    atlas = 'placeholders',
+    blueprint_compat = false,
+    pos = {x = 0, y = 0},
+    rarity = 4,
+    cost = 20,
+    calculate = function(self, card, context)
+        if context.mod_probability and not context.blueprint then
+            return {
+                numerator = context.numerator * 2
+            }
+        end
+    end,
+}
